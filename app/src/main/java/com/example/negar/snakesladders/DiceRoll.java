@@ -141,7 +141,7 @@ public class DiceRoll extends AppCompatActivity {
             }
             rolling=false;  //user can press again
 
-            String message=String.format ("Go to tile %d", msg.what);
+            String message=String.format ("Go %d tiles forwars", msg.what);
             textView.setText(message);
 
             return true;

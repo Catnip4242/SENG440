@@ -26,17 +26,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SetBoardCenter extends Activity implements OnClickListener {
-
-    TextView location;
-    Button getLocation;
-    Button go;
-
-    private LocationManager locationMangaer=null;
+    private LocationManager locationManager=null;
     private LocationListener locationListener=null;
     Location center=null;
 
     private Button btnGetLocation = null;
-    private EditText editLocation = null;
+    private Button btnSetLocation = null;
+
+    private TextView locationView = null;
     private ProgressBar pb =null;
 
     private static final String TAG = "Debug";
@@ -54,15 +51,19 @@ public class SetBoardCenter extends Activity implements OnClickListener {
         pb = (ProgressBar) findViewById(R.id.progressBar1);
         pb.setVisibility(View.INVISIBLE);
 
-        editLocation = (EditText) findViewById(R.id.editTextLocation);
+
+        locationView = (TextView) findViewById(R.id.locationView);
 
         btnGetLocation = (Button) findViewById(R.id.btnLocation);
         btnGetLocation.setOnClickListener(this);
 
-        locationMangaer = (LocationManager)
+        btnSetLocation = (Button) findViewById(R.id.btnSet);
+        btnSetLocation.setVisibility(View.INVISIBLE);
+
+        locationManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
         try {
-            Location location = locationMangaer.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (location != null) {
                 // add location to the location listener for location changes
                 //GPSListener.onLocationChanged(location);
@@ -82,11 +83,15 @@ public class SetBoardCenter extends Activity implements OnClickListener {
         if (flag) {
 
             pb.setVisibility(View.VISIBLE);
+            locationView.setText("");
+            btnSetLocation.setVisibility(View.INVISIBLE);
             locationListener = new MyLocationListener();
 
             try {
-                Location location = locationMangaer.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                locationMangaer.requestLocationUpdates(LocationManager
+                if (locationManager==null){locationManager = (LocationManager)
+                        getSystemService(Context.LOCATION_SERVICE);}
+                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                locationManager.requestLocationUpdates(LocationManager
                         .GPS_PROVIDER, 0, 0,locationListener);
             } catch (SecurityException e) {
                 //dialogGPS(this.getContext()); // lets the user know there is a problem with the gps
@@ -148,20 +153,21 @@ public class SetBoardCenter extends Activity implements OnClickListener {
         @Override
         public void onLocationChanged(Location loc) {
             center=loc;
-            editLocation.setText("");
+            locationView.setText("");
             pb.setVisibility(View.INVISIBLE);
+            btnSetLocation.setVisibility(View.VISIBLE);
             //Toast.makeText(getBaseContext(),"Location changed : Lat: " +
-                            //loc.getLatitude()+ " Lng: " + loc.getLongitude(),
-                    //Toast.LENGTH_SHORT).show();
+            //loc.getLatitude()+ " Lng: " + loc.getLongitude(),
+            //Toast.LENGTH_SHORT).show();
             String longitude = "Longitude: " +loc.getLongitude();
             String latitude = "Latitude: " +loc.getLatitude();
-            editLocation.setText(latitude+"\n"+longitude);
+            locationView.setText(latitude+"\n"+longitude);
 
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-            // TODO Auto-generated method stub
+            alertbox("Gps Provider", "Your GPS provider is disabled");
         }
 
         @Override
@@ -184,15 +190,14 @@ public class SetBoardCenter extends Activity implements OnClickListener {
                 centerJSON.put("long", center.getLongitude());
 
             } catch (JSONException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             resultIntent.putExtra("centerLocation", centerJSON.toString());}
         else {
             alertbox("Gps Status!!", "Your GPS is: OFF");
         }
-        locationMangaer.removeUpdates(locationListener);
-        locationMangaer = null;
+        locationManager.removeUpdates(locationListener);
+        locationManager = null;
         startActivity(resultIntent);
 
     }

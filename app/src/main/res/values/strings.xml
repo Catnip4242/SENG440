@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Snakes Ladders</string>
     <string name="set_Center_name">Set Board Center</string>
-    <string name="set_center_description">Stand at the center of your game board and press Set!</string>
+    <string name="set_center_description">Get the position of game board start\n and press Set!</string>
     <string name="set_board_center">Set!</string>
     <string name="start_game_button">Go!</string>
     <string name="latitude">Latitude</string>

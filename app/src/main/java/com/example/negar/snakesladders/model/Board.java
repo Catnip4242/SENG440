@@ -4,21 +4,20 @@ import android.graphics.Point;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Board {
     public int size;
-    private String style="standard";
     public List<List<Integer>> boardTilesPoints = new ArrayList<List<Integer>>();
+    public List<Integer> boardSnakes=new ArrayList<Integer>();
+    public List<Integer> boardLadders=new ArrayList<Integer>();
 
-    public Board(int size, String style){
-        this.size=size;
-        this.style=style;
-        //boardmap
-    }
 
     public Board(int size){
         this.size=size;
+        boardSnakes= Arrays.asList( 2,14,21);
+        boardLadders=Arrays.asList(5,6,13);
     }
 
     int getSize(){

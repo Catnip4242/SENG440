@@ -31,7 +31,7 @@
         android:onClick="startAgain"
         android:text="Start again"
         android:textAllCaps="false"
-        android:textColor="@color/colorBackground"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.021"
